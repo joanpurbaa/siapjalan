@@ -1,0 +1,8 @@
+"use client";
+import {useState} from "react";import Link from "next/link";import {Send} from "lucide-react";
+import {useStore} from "@/lib/store";import {APP} from "@/lib/data";import {fmt} from "@/components/OppCard";import {Avatar,StatusBadge,EmptyState} from "@/components/ui";
+export default function Apps(){const {s}=useStore();const [f,setF]=useState("");const l=s.apps.filter((a:any)=>!f||a.status===f);
+ return <div><h1 className="text-2xl font-bold">Lamaran</h1><p className="mb-4 text-sm text-slate-600">Lamaran demo — hanya tersimpan di perangkat ini, tidak dikirim ke organisasi nyata.</p>
+  <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-5">{[["","Semua"],...Object.entries(APP)].map(([k,v]:any)=><button key={k} aria-pressed={f===k} onClick={()=>setF(k)} className={`card text-left ${f===k?"!border-brand !bg-brand-soft":"hover:border-brand"}`}><b className="text-xl">{s.apps.filter((a:any)=>!k||a.status===k).length}</b><span className="block text-xs text-slate-600">{v}</span></button>)}</div>
+  {l.length?<ul className="space-y-2">{l.map((a:any)=>{const o=s.opps.find((x:any)=>x.id===a.oppId);return <li key={a.id} className="card flex flex-wrap items-center gap-3"><Avatar name={o?.org||"?"} size={40} square/><div className="min-w-0 flex-1"><Link className="font-semibold hover:underline" href={`/peluang/${a.oppId}`}>{o?.title}</Link><p className="truncate text-xs text-slate-500">{o?.org} · Dikirim {fmt(a.date)}</p></div><StatusBadge k={a.status}/></li>})}</ul>
+  :<EmptyState I={Send} title="Belum ada lamaran" text="Lamaran yang kamu kirim akan muncul di sini beserta statusnya." href="/peluang" cta="Jelajahi peluang"/>}</div>}
